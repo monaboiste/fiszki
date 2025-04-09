@@ -4,3 +4,16 @@
 # IDE
 .idea
 .vscode
+
+# env
+.env
+.env.local
+
+# dependencies
+node_modules
+
+# build output
+dist
+
+# auto-generated
+.astro
