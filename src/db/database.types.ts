@@ -58,6 +58,7 @@ export interface Database {
           created_at: string;
           flashcard_id: number;
           front: string;
+          generation_id: number | null;
           type: string;
           updated_at: string;
           user_id: number;
@@ -67,6 +68,7 @@ export interface Database {
           created_at?: string;
           flashcard_id?: number;
           front: string;
+          generation_id?: number | null;
           type: string;
           updated_at?: string;
           user_id: number;
@@ -76,11 +78,19 @@ export interface Database {
           created_at?: string;
           flashcard_id?: number;
           front?: string;
+          generation_id?: number | null;
           type?: string;
           updated_at?: string;
           user_id?: number;
         };
         Relationships: [
+          {
+            foreignKeyName: "flashcards_generation_id_fkey";
+            columns: ["generation_id"];
+            isOneToOne: false;
+            referencedRelation: "generations";
+            referencedColumns: ["generation_id"];
+          },
           {
             foreignKeyName: "flashcards_user_id_fkey";
             columns: ["user_id"];
@@ -94,37 +104,37 @@ export interface Database {
         Row: {
           accepted: boolean;
           created_at: string;
-          flashcard_id: number;
           generation_duration_ms: number;
           generation_id: number;
           input_text: string;
           model_used: string;
+          user_id: number;
         };
         Insert: {
           accepted?: boolean;
           created_at?: string;
-          flashcard_id: number;
           generation_duration_ms: number;
           generation_id?: number;
           input_text: string;
           model_used: string;
+          user_id: number;
         };
         Update: {
           accepted?: boolean;
           created_at?: string;
-          flashcard_id?: number;
           generation_duration_ms?: number;
           generation_id?: number;
           input_text?: string;
           model_used?: string;
+          user_id?: number;
         };
         Relationships: [
           {
-            foreignKeyName: "generations_flashcard_id_fkey";
-            columns: ["flashcard_id"];
+            foreignKeyName: "generations_user_id_fkey";
+            columns: ["user_id"];
             isOneToOne: false;
-            referencedRelation: "flashcards";
-            referencedColumns: ["flashcard_id"];
+            referencedRelation: "users";
+            referencedColumns: ["user_id"];
           },
         ];
       };

@@ -17,29 +17,3 @@ create index ai_generation_logs_generation_id_idx on ai_generation_logs(generati
 
 -- Enable Row Level Security
 alter table ai_generation_logs enable row level security;
-
--- Create RLS Policies
-
--- Select policy for authenticated users
-create policy "Users can view their own generation logs"
-    on ai_generation_logs
-    for select
-    to authenticated
-    using (exists (
-        select 1 from generations
-        join flashcards on flashcards.flashcard_id = generations.flashcard_id
-        where generations.generation_id = ai_generation_logs.generation_id
-        and flashcards.user_id::text = auth.uid()::text
-    ));
-
--- Insert policy for authenticated users
-create policy "Users can create logs for their generations"
-    on ai_generation_logs
-    for insert
-    to authenticated
-    with check (exists (
-        select 1 from generations
-        join flashcards on flashcards.flashcard_id = generations.flashcard_id
-        where generations.generation_id = ai_generation_logs.generation_id
-        and flashcards.user_id::text = auth.uid()::text
-    ));

@@ -18,8 +18,6 @@ drop policy if exists "Users can create generations for their flashcards" on gen
 alter table generations disable row level security;
 
 -- Disable RLS on ai_generation_logs table
-drop policy if exists "Users can view their own generation logs" on ai_generation_logs;
-drop policy if exists "Users can create logs for their generations" on ai_generation_logs;
 alter table ai_generation_logs disable row level security;
 
 comment on table flashcards is 'WARNING: RLS policies temporarily disabled for development';
