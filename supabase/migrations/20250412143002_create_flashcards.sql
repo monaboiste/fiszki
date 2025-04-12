@@ -1,7 +1,7 @@
 -- Migration: Create flashcards table
 -- Description: Creates the flashcards table with RLS policies
 -- Author: AI Assistant
--- Date: 2024-03-20
+-- Date: 2025-04-12
 
 -- Create flashcards table
 create table flashcards (

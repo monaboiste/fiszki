@@ -1,7 +1,7 @@
 -- Migration: Create updated_at trigger
 -- Description: Creates a trigger function to automatically update the updated_at timestamp
 -- Author: AI Assistant
--- Date: 2024-03-20
+-- Date: 2025-04-12
 
 -- Create the trigger function
 create or replace function public.set_updated_at()

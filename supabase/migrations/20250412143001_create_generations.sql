@@ -1,7 +1,7 @@
 -- Migration: Create generations table
 -- Description: Creates the generations table with RLS policies
 -- Author: AI Assistant
--- Date: 2024-03-20
+-- Date: 2025-04-12
 
 -- Create generations table
 create table generations (

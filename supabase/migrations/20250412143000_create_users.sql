@@ -1,7 +1,7 @@
 -- Migration: Create users table
 -- Description: Creates the core users table
 -- Author: AI Assistant
--- Date: 2024-03-20
+-- Date: 2025-04-12
 
 -- Enable pgcrypto for UUID generation
 create extension if not exists "pgcrypto";

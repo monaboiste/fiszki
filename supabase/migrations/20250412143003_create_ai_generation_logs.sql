@@ -1,7 +1,7 @@
 -- Migration: Create AI generation logs table
 -- Description: Creates the ai_generation_logs table with RLS policies
 -- Author: AI Assistant
--- Date: 2024-03-20
+-- Date: 2025-04-12
 
 -- Create ai_generation_logs table
 create table ai_generation_logs (

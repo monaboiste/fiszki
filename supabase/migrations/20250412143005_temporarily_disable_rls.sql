@@ -1,7 +1,7 @@
 -- Migration: Temporarily disable RLS policies
 -- Description: Disables all RLS policies during development phase. IMPORTANT: Re-enable before production!
 -- Author: AI Assistant
--- Date: 2024-03-20
+-- Date: 2025-04-12
 
 -- WARNING: This is a development-only migration. These policies should be re-enabled before going to production!
 
