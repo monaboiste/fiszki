@@ -12,7 +12,7 @@ const aiService: AIService = new MockAIService();
 async function logGenerationError(supabase: SupabaseClient, error: GenerationError, generationId?: number) {
   try {
     await supabase.from("ai_generation_logs").insert({
-      generation_id: generationId ?? -1, // Use -1 as a sentinel value for errors without generation
+      generation_id: generationId,
       error_code: error.code,
       error_description: error.toErrorDescription(),
     });
