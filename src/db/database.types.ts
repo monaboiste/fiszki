@@ -24,33 +24,25 @@ export interface Database {
         Row: {
           error_code: string;
           error_description: string;
-          generation_id: number;
+          generation_id: number | null;
           log_id: number;
           logged_at: string;
         };
         Insert: {
           error_code: string;
           error_description: string;
-          generation_id: number;
+          generation_id?: number | null;
           log_id?: number;
           logged_at?: string;
         };
         Update: {
           error_code?: string;
           error_description?: string;
-          generation_id?: number;
+          generation_id?: number | null;
           log_id?: number;
           logged_at?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: "ai_generation_logs_generation_id_fkey";
-            columns: ["generation_id"];
-            isOneToOne: false;
-            referencedRelation: "generations";
-            referencedColumns: ["generation_id"];
-          },
-        ];
+        Relationships: [];
       };
       flashcards: {
         Row: {
