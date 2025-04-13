@@ -229,12 +229,12 @@
 
 - **Fiszki (Flashcards)**:
 
-  - `front` - String, maksymalnie 200 znaków, wymagany
-  - `back` - String, maksymalnie 500 znaków, wymagany
+  - `front` - String, minimum 1 znak, maksymalnie 200 znaków, wymagany
+  - `back` - String, minimum 1 znak, maksymalnie 500 znaków, wymagany
   - `type` - Enum ["manual", "ai_generated", "ai_generated_modified"], wymagany
 
 - **Generacje (Generations)**:
-  - `input_text` - String, maksymalnie 10000 znaków, wymagany
+  - `input_text` - String, minimum 20 znaków, maksymalnie 10000 znaków, wymagany
   - `generation_duration_ms` - Integer
 
 ### Logika biznesowa

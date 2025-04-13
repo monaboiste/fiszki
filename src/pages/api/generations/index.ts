@@ -7,7 +7,7 @@ import { generateFlashcards } from "../../../lib/services/generation.service";
 
 // Input validation schema
 const requestSchema = z.object({
-  input_text: z.string().min(1, "Input text cannot be empty").max(10000, "Input text cannot exceed 10000 characters"),
+  input_text: z.string().min(20, "Input text cannot be empty").max(10000, "Input text cannot exceed 10000 characters"),
 });
 
 export const prerender = false;
