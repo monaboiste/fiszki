@@ -11,7 +11,6 @@ import type { Tables } from "./db/database.types";
 export type FlashcardEntity = Tables<"flashcards">;
 export type AIGenerationLogEntity = Tables<"ai_generation_logs">;
 export type GenerationEntity = Tables<"generations">;
-export type UserEntity = Tables<"users">;
 
 /**
  * CreateFlashcardCommand represents the DTO for creating a new flashcard.
@@ -97,8 +96,3 @@ export interface RegisterUserCommand {
   email: string;
   password: string;
 }
-
-/**
- * UserDto represents the user data returned by the API after registration or when retrieved.
- */
-export type UserDto = Pick<UserEntity, "user_id" | "email">;

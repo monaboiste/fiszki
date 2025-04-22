@@ -10,18 +10,13 @@ const requestSchema = z.object({
   flashcards: z
     .array(
       z.object({
-        front: z
-          .string()
-          .min(1, { message: "Front must be at least 1 character" })
-          .max(200, { message: "Front must be at most 200 characters" }),
-        back: z
-          .string()
-          .min(1, { message: "Back must be at least 1 character" })
-          .max(500, { message: "Back must be at most 500 characters" }),
+        front: z.string().min(1, "Front must be at least 1 character").max(200, "Front must be at most 200 characters"),
+        back: z.string().min(1, "Back must be at least 1 character").max(500, "Back must be at most 500 characters"),
         type: z.enum(["manual", "ai_generated", "ai_generated_modified"]),
+        generation_id: z.number().int().positive().nullable(),
       })
     )
-    .nonempty({ message: "At least one flashcard is required" }),
+    .nonempty("At least one flashcard is required"),
 });
 
 export const POST: APIRoute = async ({ request, locals }) => {

@@ -63,12 +63,14 @@
       {
         "front": "Pytanie 1",
         "back": "Odpowiedź 1",
-        "type": "manual"
+        "type": "manual",
+        "generation_id": 1
       },
       {
         "front": "Pytanie 2",
         "back": "Odpowiedź 2",
-        "type": "manual"
+        "type": "manual",
+        "generation_id": 1
       }
     ]
   }
