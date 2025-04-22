@@ -23,7 +23,7 @@ async function logGenerationError(supabase: SupabaseClient, error: GenerationErr
 
 export async function generateFlashcards(
   inputText: string,
-  userId: number,
+  userId: string,
   supabase: SupabaseClient
 ): Promise<CreateFlashcardProposalResponseDto> {
   let generationId: number | undefined;

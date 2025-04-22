@@ -5,8 +5,6 @@ import { MOCK_USER_ID } from "../../../db/supabase.client";
 import { createFlashcards } from "../../../lib/services/flashcards.service";
 import type { APIRoute } from "astro";
 
-import { supabaseClient } from "../../../db/supabase.client";
-
 // Input validation schema
 const requestSchema = z.object({
   flashcards: z
@@ -26,7 +24,7 @@ const requestSchema = z.object({
     .nonempty({ message: "At least one flashcard is required" }),
 });
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     // Parse and validate request body using Zod (skipping real authentication for now)
     const body = await request.json();
@@ -48,8 +46,11 @@ export const POST: APIRoute = async ({ request }) => {
     const { flashcards } = validationResult.data;
     const flashcardsWithUser = flashcards.map((flashcard) => ({ ...flashcard, user_id: MOCK_USER_ID }));
 
-    const responseData = await createFlashcards(flashcardsWithUser, supabaseClient);
-    return new Response(JSON.stringify(responseData), { status: 201 });
+    const responseData = await createFlashcards(flashcardsWithUser, locals.supabase);
+    return new Response(JSON.stringify(responseData), {
+      status: 201,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (err) {
     console.error("Unexpected error:", err);
     return new Response(JSON.stringify({ error: "Internal Server Error" }), {

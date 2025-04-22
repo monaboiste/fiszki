@@ -53,7 +53,7 @@ export interface Database {
           generation_id: number | null;
           type: string;
           updated_at: string;
-          user_id: number;
+          user_id: string;
         };
         Insert: {
           back: string;
@@ -63,7 +63,7 @@ export interface Database {
           generation_id?: number | null;
           type: string;
           updated_at?: string;
-          user_id: number;
+          user_id: string;
         };
         Update: {
           back?: string;
@@ -73,7 +73,7 @@ export interface Database {
           generation_id?: number | null;
           type?: string;
           updated_at?: string;
-          user_id?: number;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -82,13 +82,6 @@ export interface Database {
             isOneToOne: false;
             referencedRelation: "generations";
             referencedColumns: ["generation_id"];
-          },
-          {
-            foreignKeyName: "flashcards_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["user_id"];
           },
         ];
       };
@@ -100,7 +93,7 @@ export interface Database {
           generation_id: number;
           input_text: string;
           model_used: string;
-          user_id: number;
+          user_id: string;
         };
         Insert: {
           accepted?: boolean;
@@ -109,7 +102,7 @@ export interface Database {
           generation_id?: number;
           input_text: string;
           model_used: string;
-          user_id: number;
+          user_id: string;
         };
         Update: {
           accepted?: boolean;
@@ -118,39 +111,7 @@ export interface Database {
           generation_id?: number;
           input_text?: string;
           model_used?: string;
-          user_id?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "generations_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["user_id"];
-          },
-        ];
-      };
-      users: {
-        Row: {
-          created_at: string;
-          email: string;
-          password_hash: string;
-          updated_at: string;
-          user_id: number;
-        };
-        Insert: {
-          created_at?: string;
-          email: string;
-          password_hash: string;
-          updated_at?: string;
-          user_id?: number;
-        };
-        Update: {
-          created_at?: string;
-          email?: string;
-          password_hash?: string;
-          updated_at?: string;
-          user_id?: number;
+          user_id?: string;
         };
         Relationships: [];
       };

@@ -5,7 +5,7 @@ interface FlashcardWithUser {
   front: string;
   back: string;
   type: "manual" | "ai_generated" | "ai_generated_modified";
-  user_id: number;
+  user_id: string;
 }
 
 /**
