@@ -34,7 +34,7 @@ System UI Fiszki składa się z zestawu widoków dedykowanych różnym funkcjona
 
   - Ścieżka: `/generate`
   - Główny cel: Umożliwienie generowania fiszek przy użyciu AI i ich rewizję (zaakceptuj, edytuj, odrzuć)
-  - Kluczowe informacje: Modal z tekstowym polem wejściowym, licznik znaków, komunikat o przekroczeniu limitu, toggle do akceptacji generowanych fiszek.
+  - Kluczowe informacje: Modal z tekstowym polem wejściowym, licznik znaków, komunikat o przekroczeniu limitu, przyciski do akceptacji generowanych fiszek, odrzucenia lub ich edycji.
   - Kluczowe komponenty: Modal z text area, przyciski "Zapisz Wszystkie" i "Zapisz Zaakceptowane", live validation z tooltipem, przyciski "Zaakceptuj", "Odrzuć", "Edytuj" na każdej karcie z fiszką
   - UX / Dostępność / Bezpieczeństwo: Natychmiastowa walidacja, czytelne inline komunikaty błędów.
 
