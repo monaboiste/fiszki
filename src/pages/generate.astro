@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/Layout.astro";
+import GenerationsView from "../components/GenerationsView";
+
+const title = "Generate Flashcards - 10xFiszki";
+---
+
+<Layout title={title}>
+  <main class="container mx-auto py-8 px-4">
+    <h1 class="text-3xl font-bold mb-6">Generate Flashcards with AI</h1>
+    <GenerationsView client:load />
+  </main>
+</Layout>
