@@ -10,4 +10,4 @@ export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKe
 export type SupabaseClient = typeof supabaseClient;
 
 // TODO: temporary
-export const MOCK_USER_ID = "5db8ebf4-200a-4f3c-9398-5ea79a46aee4";
+export const MOCK_USER_ID = "2e91a771-1d07-446d-b13f-c41c88a467e5";

@@ -17,6 +17,26 @@ export class MockAIService implements AIService {
           back: "Key points extracted from the text...",
           type: "ai_generated",
         },
+        {
+          front: "What are the key points?",
+          back: "Key points extracted from the text...",
+          type: "ai_generated",
+        },
+        {
+          front: "What are the key points?",
+          back: "Key points extracted from the text...",
+          type: "ai_generated",
+        },
+        {
+          front: "What are the key points?",
+          back: "Key points extracted from the text...",
+          type: "ai_generated",
+        },
+        {
+          front: "What are the key points?",
+          back: "Key points extracted from the text...",
+          type: "ai_generated",
+        },
       ],
     };
   }

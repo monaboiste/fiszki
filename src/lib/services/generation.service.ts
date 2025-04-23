@@ -52,7 +52,6 @@ export async function generateFlashcards(
         user_id: userId,
         generation_duration_ms: generationDurationMs,
         model_used: MOCK_MODEL,
-        accepted: false,
       })
       .select()
       .single();

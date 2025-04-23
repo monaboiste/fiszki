@@ -87,7 +87,6 @@ export interface Database {
       };
       generations: {
         Row: {
-          accepted: boolean;
           created_at: string;
           generation_duration_ms: number;
           generation_id: number;
@@ -96,7 +95,6 @@ export interface Database {
           user_id: string;
         };
         Insert: {
-          accepted?: boolean;
           created_at?: string;
           generation_duration_ms: number;
           generation_id?: number;
@@ -105,7 +103,6 @@ export interface Database {
           user_id: string;
         };
         Update: {
-          accepted?: boolean;
           created_at?: string;
           generation_duration_ms?: number;
           generation_id?: number;
