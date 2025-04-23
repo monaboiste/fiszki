@@ -199,7 +199,6 @@
     "generation_id": 1,
     "generation_duration_ms": 2500,
     "input_text": "Wyjaśnij teorię względności.",
-    "accepted": true,
     "model": "gpt-4",
     "created_at": "2023-06-01T12:00:00Z",
     "proposed_flashcards": [

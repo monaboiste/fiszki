@@ -56,7 +56,7 @@
 2. Kontroler API weryfikuje token JWT (401 przy braku autoryzacji) oraz waliduje dane wejściowe przy użyciu np. zod.
 3. Serwis (np. `generation.service`) odpala logikę:
    - Wywołanie zewnętrznego serwisu AI do generowania propozycji fiszek.
-   - Utworzenie rekordu w tabeli `generations` z polami: `user_id` (pobrane z kontekstu autoryzacji), `input_text`, `generation_duration_ms`, `accepted` (domyślnie false), `model_used`.
+   - Utworzenie rekordu w tabeli `generations` z polami: `user_id` (pobrane z kontekstu autoryzacji), `input_text`, `generation_duration_ms`, `model_used`.
 4. W zależności od wyniku:
    - W przypadku sukcesu, zwrócenie danych (propozycje fiszek oraz `generation_id`) z kodem 201.
    - W przypadku błędów integracji, logowanie błędów do tabeli `ai_generation_logs` i zwrócenie odpowiedniego błędu.

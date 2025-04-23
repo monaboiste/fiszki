@@ -83,7 +83,6 @@ export interface GenerationDto {
   generation_id: GenerationEntity["generation_id"];
   generation_duration_ms: GenerationEntity["generation_duration_ms"];
   input_text: GenerationEntity["input_text"];
-  accepted: GenerationEntity["accepted"];
   model: GenerationEntity["model_used"];
   created_at: GenerationEntity["created_at"];
   proposed_flashcards: FlashcardDto[];

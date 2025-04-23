@@ -27,7 +27,6 @@
 - **generation_duration_ms**: INTEGER NOT NULL
   - CHECK (generation_duration_ms >= 0)
 - **input_text**: VARCHAR(10000) NOT NULL
-- **accepted**: BOOLEAN NOT NULL DEFAULT FALSE
 - **model_used**: VARCHAR(100) NOT NULL
 - **created_at**: TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
