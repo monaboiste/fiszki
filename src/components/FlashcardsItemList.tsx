@@ -20,6 +20,7 @@ export default function FlashcardsItemList({
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
+  const [hasSaved, setHasSaved] = useState<boolean>(false);
 
   const handleSaveAll = async () => {
     await saveFlashcards(flashcards);
@@ -34,6 +35,7 @@ export default function FlashcardsItemList({
     setIsSaving(true);
     setSaveError(null);
     setSaveSuccess(false);
+    setHasSaved(false);
 
     try {
       const payload: BulkCreateFlashcardsCommand = {
@@ -60,6 +62,7 @@ export default function FlashcardsItemList({
       }
 
       setSaveSuccess(true);
+      setHasSaved(true);
     } catch (err) {
       setSaveError(err instanceof Error ? err.message : "An unexpected error occurred while saving");
       console.error("Error saving flashcards:", err);
@@ -80,6 +83,7 @@ export default function FlashcardsItemList({
           onSaveAccepted={handleSaveAccepted}
           disableSaveAccepted={acceptedCount === 0}
           isSaving={isSaving}
+          disabled={hasSaved}
         />
       </div>
 
@@ -102,6 +106,7 @@ export default function FlashcardsItemList({
             flashcard={flashcard}
             onStatusChange={(status: "accepted" | "rejected" | "edited") => onStatusChange(index, status)}
             onEdit={(updatedFlashcard: FlashcardProposalViewModel) => onEdit(index, updatedFlashcard)}
+            disabled={hasSaved}
           />
         ))}
       </div>

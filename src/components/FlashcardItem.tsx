@@ -8,9 +8,10 @@ interface FlashcardItemProps {
   flashcard: FlashcardProposalViewModel;
   onStatusChange: (status: "accepted" | "rejected" | "edited") => void;
   onEdit: (updatedFlashcard: FlashcardProposalViewModel) => void;
+  disabled?: boolean;
 }
 
-export default function FlashcardItem({ flashcard, onStatusChange, onEdit }: FlashcardItemProps) {
+export default function FlashcardItem({ flashcard, onStatusChange, onEdit, disabled = false }: FlashcardItemProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedFront, setEditedFront] = useState<string>(flashcard.front);
   const [editedBack, setEditedBack] = useState<string>(flashcard.back);
@@ -98,7 +99,7 @@ export default function FlashcardItem({ flashcard, onStatusChange, onEdit }: Fla
           : flashcard.status === "rejected"
             ? "border-red-300 opacity-70"
             : "border-gray-200"
-      }`}
+      } ${disabled ? "opacity-70 pointer-events-none" : ""}`}
     >
       {isEditing ? (
         // Edit Mode
@@ -173,6 +174,7 @@ export default function FlashcardItem({ flashcard, onStatusChange, onEdit }: Fla
                   : "text-green-600 border-green-600 hover:bg-green-50 hover:text-green-700"
               }
               size="sm"
+              disabled={disabled}
             >
               Accept
             </Button>
@@ -185,6 +187,7 @@ export default function FlashcardItem({ flashcard, onStatusChange, onEdit }: Fla
                   : "text-red-600 border-red-600 hover:bg-red-50 hover:text-red-700"
               }
               size="sm"
+              disabled={disabled}
             >
               Reject
             </Button>
@@ -193,6 +196,7 @@ export default function FlashcardItem({ flashcard, onStatusChange, onEdit }: Fla
               variant="outline"
               className="text-blue-600 border-blue-600 hover:bg-blue-50 hover:text-blue-700"
               size="sm"
+              disabled={disabled}
             >
               Edit
             </Button>
