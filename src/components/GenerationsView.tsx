@@ -62,7 +62,7 @@ export default function GenerationsView() {
         input_text: inputText,
         proposed_flashcards: data.proposed_flashcards.map((flashcard) => ({
           ...flashcard,
-          status: "accepted", // Default status is accepted
+          status: "rejected", // Default status is rejected
         })),
       };
 
