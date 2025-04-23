@@ -139,12 +139,12 @@ export default function FlashcardItem({ flashcard, onStatusChange, onEdit, disab
               onClick={handleSaveEdit}
               disabled={!!frontError || !!backError}
               variant={frontError || backError ? "secondary" : "default"}
-              className={frontError || backError ? "opacity-50" : ""}
+              className={frontError || backError ? "opacity-50" : "hover:cursor-pointer"}
               size="sm"
             >
               Save
             </Button>
-            <Button onClick={handleCancelEdit} variant="outline" size="sm">
+            <Button onClick={handleCancelEdit} variant="outline" size="sm" className="hover:cursor-pointer">
               Cancel
             </Button>
           </div>
@@ -170,8 +170,8 @@ export default function FlashcardItem({ flashcard, onStatusChange, onEdit, disab
               variant={flashcard.status === "accepted" ? "default" : "outline"}
               className={
                 flashcard.status === "accepted"
-                  ? "bg-green-600 hover:bg-green-700"
-                  : "text-green-600 border-green-600 hover:bg-green-50 hover:text-green-700"
+                  ? "bg-green-600 hover:bg-green-600"
+                  : "text-green-600 border-green-600 hover:bg-green-50 hover:text-green-700 hover:cursor-pointer"
               }
               size="sm"
               disabled={disabled}
@@ -183,8 +183,8 @@ export default function FlashcardItem({ flashcard, onStatusChange, onEdit, disab
               variant={flashcard.status === "rejected" ? "default" : "outline"}
               className={
                 flashcard.status === "rejected"
-                  ? "bg-red-600 hover:bg-red-700"
-                  : "text-red-600 border-red-600 hover:bg-red-50 hover:text-red-700"
+                  ? "bg-red-600 hover:bg-red-600"
+                  : "text-red-600 border-red-600 hover:bg-red-50 hover:text-red-700 hover:cursor-pointer"
               }
               size="sm"
               disabled={disabled}
@@ -194,7 +194,7 @@ export default function FlashcardItem({ flashcard, onStatusChange, onEdit, disab
             <Button
               onClick={handleEditClick}
               variant="outline"
-              className="text-blue-600 border-blue-600 hover:bg-blue-50 hover:text-blue-700"
+              className="text-blue-600 border-blue-600 hover:bg-blue-50 hover:text-blue-700 hover:cursor-pointer"
               size="sm"
               disabled={disabled}
             >
