@@ -1,13 +1,47 @@
-import type { CreateFlashcardProposalResponseDto } from "../../types";
+import type { CreateFlashcardProposalResponseDto, CreateFlashcardCommand } from "../../types";
 import type { SupabaseClient } from "../../db/supabase.client";
-import type { AIService } from "./ai/types";
-import { MockAIService } from "./ai/mock.service";
-import { GenerationError, GenerationErrorCode } from "./errors/generation.errors";
+import { OpenRouterService } from "./openrouter.service";
+import type { OpenRouterConfig } from "./openrouter.types";
+import { GenerationError, GenerationErrorCode } from "./generation.errors";
 
-const MOCK_MODEL = "gpt-4-turbo-preview";
-
-// For now, we use the mock service
-const aiService: AIService = new MockAIService();
+const openRouterConfig: OpenRouterConfig = {
+  apiKey:
+    import.meta.env.OPENROUTER_API_KEY ??
+    (() => {
+      throw new Error("OPENROUTER_API_KEY environment variable is not set");
+    })(),
+  model: "google/learnlm-1.5-pro-experimental:free",
+  systemMessage: `You are an expert at creating flashcards from given text.
+Your task is to analyze the input text and create meaningful flashcards that help in learning the material.
+Each flashcard should have a front (question/concept) and back (answer/explanation).
+Front should contain maximum 200 characters. Back should contain maximum 500 characters.
+Return at most 3 flashcards.`, // todo: just 3 for now to support free models' token restrictions
+  responseFormat: {
+    type: "json_schema" as const,
+    json_schema: {
+      name: "flashcards_schema",
+      strict: true,
+      schema: {
+        type: "object",
+        properties: {
+          flashcards: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                front: { type: "string" },
+                back: { type: "string" },
+              },
+              required: ["front", "back"],
+            },
+          },
+        },
+        required: ["flashcards"],
+      },
+    },
+  },
+};
+const openRouterService = new OpenRouterService(openRouterConfig);
 
 async function logGenerationError(supabase: SupabaseClient, error: GenerationError, generationId?: number) {
   try {
@@ -30,8 +64,8 @@ export async function generateFlashcards(
   const startTime = performance.now();
 
   try {
-    // Generate flashcards using AI service
-    const aiResponse = await aiService.generateFlashcards({ prompt: inputText }).catch((error) => {
+    // Generate flashcards using OpenRouter service
+    const aiResponse = await openRouterService.sendChatRequest(inputText).catch((error) => {
       const generationError = new GenerationError(
         GenerationErrorCode.AI_SERVICE_ERROR,
         "Failed to generate flashcards using AI service",
@@ -44,6 +78,17 @@ export async function generateFlashcards(
 
     const generationDurationMs = Math.round(performance.now() - startTime);
 
+    // Parse the AI response to get flashcards
+    let parsedResponse = null;
+    try {
+      parsedResponse = JSON.parse(aiResponse.choices[0].message.content) as {
+        flashcards: CreateFlashcardCommand[];
+      };
+    } catch (error) {
+      console.error("Failed to parse response", aiResponse);
+      throw new GenerationError(GenerationErrorCode.AI_SERVICE_ERROR, "Failed to parse response", error);
+    }
+
     // Create generation record with actual duration
     const { data: generation, error: generationError } = await supabase
       .from("generations")
@@ -51,7 +96,7 @@ export async function generateFlashcards(
         input_text: inputText,
         user_id: userId,
         generation_duration_ms: generationDurationMs,
-        model_used: MOCK_MODEL,
+        model_used: openRouterConfig.model,
       })
       .select()
       .single();
@@ -71,7 +116,7 @@ export async function generateFlashcards(
 
     return {
       generation_id: generation.generation_id,
-      proposed_flashcards: aiResponse.flashcards,
+      proposed_flashcards: parsedResponse.flashcards,
     };
   } catch (error) {
     const generationError =

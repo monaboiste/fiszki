@@ -15,7 +15,7 @@ Konstruktor serwisu inicjalizuje niezbędne parametry, takie jak:
 - Klucz API i endpoint, które umożliwiają autoryzację i komunikację z OpenRouter API.
 - Domyślne ustawienia modelu (nazwa modelu, parametry takie jak `temperature`, `max_tokens` itd.).
 - Komunikat systemowy, który pełni rolę instrukcji dla modelu.
-- `response_format` – schemat walidacji odpowiedzi (np. JSON Schema) zgodnie z wzorem:
+- `response_format` – schemat walidacji odpowiedzi (np. JSON Schema) zgodnie z wzorem (przykład):
   ```
   { type: 'json_schema', json_schema: { name: 'chat_response_schema', strict: true, schema: { message: 'string', additional_info: 'string' } } }
   ```
@@ -23,7 +23,7 @@ Konstruktor serwisu inicjalizuje niezbędne parametry, takie jak:
 Przykład konstruktora:
 
 ```typescript
-constructor(apiKey: string, config: OpenRouterConfig) {
+constructor(config: OpenRouterConfig) {
   // Inicjalizacja klucza API, endpointa, domyślnych parametrów modelu oraz formatu odpowiedzi
 }
 ```
@@ -32,7 +32,7 @@ constructor(apiKey: string, config: OpenRouterConfig) {
 
 **Publiczne metody:**
 
-1. `sendChatRequest(userMessage: string): Promise<ChatResponse>`
+1. `sendChatRequest(userMessage: string): Promise<OpenRouterApiResponse>`
    - Wysyła zapytanie do API OpenRouter, łącząc komunikaty systemowe i użytkownika.
 2. `setSystemMessage(message: string): void`
    - Ustawia lub aktualizuje komunikat systemowy, który będzie dołączany do zapytań.
@@ -46,8 +46,8 @@ constructor(apiKey: string, config: OpenRouterConfig) {
 - `apiKey: string` – Klucz autoryzacyjny do API OpenRouter.
 - `endpoint: string` – URL endpointa API.
 - `systemMessage: string` – Domyślny komunikat systemowy.
-- `defaultModel: string` – Domyślna nazwa modelu, np. `gpt-4`.
-- `defaultModelParams: ModelParameters` – Domyślne parametry modelu, takie jak `temperature`, `max_tokens`.
+- `model: string` – Domyślna nazwa modelu, np. `gpt-4`.
+- `modelParams: ModelParameters` – Domyślne parametry modelu, takie jak `temperature`, `max_tokens`.
 - `responseFormat: ResponseFormat` – Schemat walidacji odpowiedzi.
 
 ## 4. Prywatne metody i pola
@@ -56,12 +56,8 @@ constructor(apiKey: string, config: OpenRouterConfig) {
 
 1. `buildPayload(messages: ChatMessage[]): ChatPayload`
    - Buduje ładunek (payload) zapytania, łącząc przekazane komunikaty z domyślnymi ustawieniami serwisu.
-2. `sendRequest(payload: ChatPayload): Promise<any>`
+2. `sendRequest(payload: ChatPayload): Promise<OpenRouterApiResponse>`
    - Wysyła zapytanie HTTP do API OpenRouter z zastosowaniem strategii retry i timeout.
-3. `handleResponse(response: any): ChatResponse`
-   - Przetwarza odpowiedź API, weryfikując jej zgodność z ustawionym `responseFormat`.
-4. `validateResponse(response: any): boolean`
-   - Waliduje strukturę odpowiedzi zgodnie z ustalonym schematem JSON.
 
 **Prywatne pola:**
 
