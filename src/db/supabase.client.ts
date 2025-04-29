@@ -2,6 +2,8 @@ import type { AstroCookies } from "astro";
 import { createServerClient, type CookieOptionsWithName, type CookieOptions } from "@supabase/ssr";
 import type { Database } from "./database.types";
 
+export type SupabaseClient = ReturnType<typeof createServerClient<Database>>;
+
 export const cookieOptions: CookieOptionsWithName = {
   name: "sb-auth-token",
   path: "/",
