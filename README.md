@@ -26,6 +26,11 @@ learning experience.
 
   - Openrouter.ai (access to various AI models such as OpenAI, Anthropic, Google, etc.)
 
+- **Testing:**
+
+  - Vitest & React Testing Library (unit and integration tests)
+  - Playwright (end-to-end tests)
+
 - **CI/CD & Hosting:**
   - GitHub Actions
   - AWS ECS Fargate (Docker-based deployment)
