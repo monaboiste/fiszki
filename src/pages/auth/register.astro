@@ -1,0 +1,13 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AuthSection from "../../components/auth/AuthSection.astro";
+import RegisterForm from "../../components/auth/RegisterForm";
+
+const title = "Create your account - 10xFiszki";
+---
+
+<Layout title={title}>
+  <AuthSection title="Create your account">
+    <RegisterForm client:load />
+  </AuthSection>
+</Layout>
