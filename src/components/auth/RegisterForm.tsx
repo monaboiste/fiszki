@@ -51,7 +51,6 @@ export default function RegisterForm() {
       });
 
       const data = await response.json();
-      console.log(data);
 
       if (!response.ok) {
         setError(data.error);
@@ -59,7 +58,7 @@ export default function RegisterForm() {
       }
 
       // Redirect to the confirmation page with the email address
-      // window.location.href = `/auth/confirmation?email=${encodeURIComponent(values.email)}`;
+      window.location.href = `/auth/confirmation?email=${encodeURIComponent(values.email)}`;
     } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {

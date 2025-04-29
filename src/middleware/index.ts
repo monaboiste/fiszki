@@ -10,6 +10,7 @@ const PUBLIC_PATHS = [
   // Auth API endpoints
   "/api/auth/login",
   "/api/auth/register",
+  "/api/auth/confirm",
 ];
 
 export const onRequest = defineMiddleware(async ({ locals, cookies, url, request, redirect }, next) => {

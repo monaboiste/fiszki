@@ -1,0 +1,31 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AuthSection from "../../components/auth/AuthSection.astro";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { EnvelopeOpenIcon } from "@radix-ui/react-icons";
+
+const title = "Confirm your email - 10xFiszki";
+const email = Astro.url.searchParams.get("email");
+---
+
+<Layout title={title}>
+  <AuthSection title="Check your email">
+    <div class="space-y-6">
+      <Alert>
+        <EnvelopeOpenIcon className="h-4 w-4" />
+        <AlertTitle>Confirmation email sent</AlertTitle>
+        <AlertDescription>
+          We've sent a confirmation email to {email}. Please check your inbox and click the link in the email to
+          activate your account.
+        </AlertDescription>
+      </Alert>
+
+      <div class="text-center">
+        <Button variant="link" asChild>
+          <a href="/auth/login">Return to login page</a>
+        </Button>
+      </div>
+    </div>
+  </AuthSection>
+</Layout>
