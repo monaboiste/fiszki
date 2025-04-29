@@ -39,7 +39,6 @@ Kiedy będziesz gotowy do utworzenia diagramu, postępuj zgodnie z poniższymi w
    - Dostęp do głównej funkcjonalności aplikacji
    - Logowanie się
    - Tworzenie konta
-   - Odzyskiwanie hasła
    - Podróż użytkownika na wysokim poziomie zgodna z wymaganiami projektu i HISTORIAMI UŻYTKOWNIKA
    - Punkty decyzyjne i alternatywne ścieżki
    - Przepływ po weryfikacji e-mail
@@ -72,7 +71,6 @@ Kiedy będziesz gotowy do utworzenia diagramu, postępuj zgodnie z poniższymi w
      FormularzLogowania: Użytkownik może się zalogować
      note right of FormularzLogowania
        Formularz zawiera pola email i hasło
-       oraz link do odzyskiwania hasła
      end note
      ```
    - Dla stanów równoległych, używaj poprawnej składni:
@@ -112,8 +110,8 @@ Kiedy będziesz gotowy do utworzenia diagramu, postępuj zgodnie z poniższymi w
      StanA --> StanB: Przycisk Dalej [dane poprawne]
      ```
    - Unikaj używania adresów URL, adresów endpointów, nawiasów, długich nazw funkcji lub złożonych wyrażeń w nazwach stanów:
-     ŹLE: [Strona Główna<br/>(Kreator Reguł)]
-     DOBRZE: [Kreator Reguł]
+     ŹLE: [Strona Główna<br/>(Nazwa Komponentu po Prawej Części Strony)]
+     DOBRZE: [Nazwa Komponentu po Prawej Części Strony]
    - Używaj spójnego nazewnictwa w całym dokumencie
    - Unikaj długich etykiet, które mogą powodować problemy z renderowaniem
 
