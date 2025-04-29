@@ -18,10 +18,13 @@ const formSchema = z
     path: ["confirmPassword"],
   });
 
+type FormData = z.infer<typeof formSchema>;
+
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
     defaultValues: {
@@ -31,13 +34,37 @@ export default function RegisterForm() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
+  const onSubmit = async (values: FormData) => {
+    try {
+      setIsLoading(true);
+      setError(null);
 
-    // Form will be connected to backend later
-    console.log("Register form submitted:", values);
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+      });
 
-    setIsLoading(false);
+      const data = await response.json();
+      console.log(data);
+
+      if (!response.ok) {
+        setError(data.error);
+        return;
+      }
+
+      // Redirect to the confirmation page with the email address
+      // window.location.href = `/auth/confirmation?email=${encodeURIComponent(values.email)}`;
+    } catch {
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -45,6 +72,8 @@ export default function RegisterForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {error && <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md">{error}</div>}
+
             <FormField
               control={form.control}
               name="email"
