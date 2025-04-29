@@ -1,12 +1,14 @@
 ---
 import "../styles/globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import Navigation from "@/components/Navigation";
 
 interface Props {
   title?: string;
 }
 
 const { title = "10xFiszki" } = Astro.props;
+const user = Astro.locals.user ? { email: Astro.locals.user.email } : null;
 ---
 
 <!doctype html>
@@ -19,6 +21,7 @@ const { title = "10xFiszki" } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
+    <Navigation user={user} client:load />
     <slot>
       <Toaster richColors closeButton client:only="react" />
     </slot>
