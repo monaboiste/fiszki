@@ -125,6 +125,37 @@ The scope of the project includes:
   - Integration with an existing spaced repetition algorithm to plan effective learning sessions.
   - Monitoring learning progress through interactive study sessions.
 
+## Testing
+
+This project includes a comprehensive testing setup with Vitest for unit/integration tests and Playwright for E2E tests.
+
+### Running Tests
+
+```bash
+# Run unit tests
+npm test
+
+# Run unit tests with watch mode
+npm run test:watch
+
+# Run unit tests with UI
+npm run test:ui
+
+# Generate coverage report
+npm run test:coverage
+
+# Run E2E tests
+npm run e2e
+
+# Run E2E tests with UI
+npm run e2e:ui
+
+# Run E2E tests in debug mode
+npm run e2e:debug
+```
+
+For more details on the testing setup, see [TESTING.md](TESTING.md).
+
 ## Project Status
 
 This project is currently under active development. New features and improvements are being continuously integrated.
