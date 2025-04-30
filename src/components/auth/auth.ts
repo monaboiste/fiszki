@@ -45,8 +45,9 @@ export const validateEmail = (email: string): ValidationResult => {
     };
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
+  const emailRegex = /^[^\s@]+@[^\s@.]+\.[^\s@.]+(?:\.[^\s@.]+)*$/;
+  const isValid = emailRegex.test(email);
+  if (!isValid) {
     return {
       isValid: false,
       error: {
