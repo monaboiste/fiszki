@@ -1,8 +1,7 @@
 export const prerender = false;
 
 import { z } from "zod";
-import { MOCK_USER_ID } from "../../../db/supabase.client";
-import { createFlashcards } from "../../../lib/services/flashcards.service";
+import { createFlashcards } from "../../lib/services/flashcards.service";
 import type { APIRoute } from "astro";
 
 // Input validation schema
@@ -21,6 +20,9 @@ const requestSchema = z.object({
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    const supabase = locals.supabase;
+    const user = locals.user;
+
     // Parse and validate request body using Zod (skipping real authentication for now)
     const body = await request.json();
     const validationResult = requestSchema.safeParse(body);
@@ -39,9 +41,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Insert flashcards in a batch operation using Supabase, attaching MOCK_USER_ID
     const { flashcards } = validationResult.data;
-    const flashcardsWithUser = flashcards.map((flashcard) => ({ ...flashcard, user_id: MOCK_USER_ID }));
+    const flashcardsWithUser = flashcards.map((flashcard) => ({ ...flashcard, user_id: user.id }));
 
-    const responseData = await createFlashcards(flashcardsWithUser, locals.supabase);
+    const responseData = await createFlashcards(flashcardsWithUser, supabase);
     return new Response(JSON.stringify(responseData), {
       status: 201,
       headers: { "Content-Type": "application/json" },

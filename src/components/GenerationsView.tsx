@@ -39,8 +39,7 @@ export default function GenerationsView() {
       const payload: RequestFlashcardGenerationCommand = {
         input_text: inputText,
       };
-
-      const response = await fetch("/api/generations", {
+      const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +49,14 @@ export default function GenerationsView() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("errorData", errorData);
+
+        // Handle authentication error specifically
+        if (response.status === 401) {
+          // Redirect to login page
+          window.location.href = "/auth/login";
+          return;
+        }
+
         throw new Error(errorData.error || "Failed to generate flashcards");
       }
 

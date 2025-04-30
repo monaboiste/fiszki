@@ -40,6 +40,3 @@ export const createSupabaseServerInstance = (context: { headers: Headers; cookie
 
   return supabase;
 };
-
-// TODO: temporary
-export const MOCK_USER_ID = "2e91a771-1d07-446d-b13f-c41c88a467e5";

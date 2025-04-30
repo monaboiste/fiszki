@@ -1,8 +1,7 @@
 import { z } from "zod";
 import type { APIRoute } from "astro";
 
-import { MOCK_USER_ID } from "../../../db/supabase.client";
-import { generateFlashcards } from "../../../lib/services/generation.service";
+import { generateFlashcards } from "../../lib/services/generation.service";
 
 // Input validation schema
 const requestSchema = z.object({
@@ -13,10 +12,12 @@ export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    const supabase = locals.supabase;
+    const user = locals.user;
+
     // Parse and validate request body
     const body = await request.json();
     const validationResult = requestSchema.safeParse(body);
-
     if (!validationResult.success) {
       return new Response(
         JSON.stringify({
@@ -33,7 +34,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const { input_text } = validationResult.data;
 
     // Generate flashcards using the service
-    const result = await generateFlashcards(input_text, MOCK_USER_ID, locals.supabase);
+    const result = await generateFlashcards(input_text, user.id, supabase);
 
     return new Response(JSON.stringify(result), {
       status: 201,

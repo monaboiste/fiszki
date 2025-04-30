@@ -13,7 +13,7 @@ const PUBLIC_PATHS = [
   "/api/auth/confirm",
 ];
 
-export const onRequest = defineMiddleware(async ({ locals, cookies, url, request, redirect }, next) => {
+export const onRequest = defineMiddleware(async ({ locals, cookies, url, request }, next) => {
   // Skip auth check for public paths
   if (PUBLIC_PATHS.includes(url.pathname)) {
     return next();
@@ -30,13 +30,21 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
   } = await supabase.auth.getUser();
 
   if (user) {
+    if (!user.email) {
+      throw new Error("Internal server error: User email is required");
+    }
+    locals.supabase = supabase;
     locals.user = {
-      email: user.email ?? null,
+      email: user.email,
       id: user.id,
     };
     return next();
   }
 
-  // Redirect to login for protected routes
-  return redirect("/auth/login");
+  return new Response(
+    JSON.stringify({
+      error: "Authentication required",
+    }),
+    { status: 401, headers: { "Content-Type": "application/json" } }
+  );
 });
