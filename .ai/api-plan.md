@@ -35,7 +35,7 @@
     "flashcards": [
       {
         "flashcard_id": 1,
-        "user_id": 1,
+        "user_id": "1",
         "generation_id": null,
         "front": "Pytanie 1",
         "back": "Odpowiedź 1",
@@ -108,7 +108,7 @@
   ```json
   {
     "flashcard_id": 1,
-    "user_id": 1,
+    "user_id": "1",
     "generation_id": null,
     "front": "Pytanie 1",
     "back": "Odpowiedź 1",

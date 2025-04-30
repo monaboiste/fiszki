@@ -4,14 +4,15 @@
 
 ### 1.1. users
 
-- **user_id**: BIGSERIAL, PRIMARY KEY
+Tabela users odnosi się do auth.users zarządzanej przez Supabase.
+
+- **user_id**: UUID, PRIMARY KEY
 - **email**: VARCHAR(255) NOT NULL UNIQUE
-- **password_hash**: TEXT NOT NULL
 
 ### 1.2. flashcards
 
 - **flashcard_id**: BIGSERIAL, PRIMARY KEY
-- **user_id**: BIGINT NOT NULL, REFERENCES users(user_id) ON DELETE CASCADE
+- **user_id**: UUID NOT NULL, REFERENCES auth.users(user_id) ON DELETE CASCADE
 - **generation_id**: BIGINT, REFERENCES generations(generation_id) ON DELETE SET NULL
 - **front**: VARCHAR(200) NOT NULL
 - **back**: VARCHAR(500) NOT NULL
@@ -23,7 +24,7 @@
 ### 1.3. generations
 
 - **generation_id**: BIGSERIAL, PRIMARY KEY
-- **user_id**: BIGINT NOT NULL, REFERENCES users(user_id) ON DELETE CASCADE
+- **user_id**: UUID NOT NULL, REFERENCES auth.users(user_id) ON DELETE CASCADE
 - **generation_duration_ms**: INTEGER NOT NULL
   - CHECK (generation_duration_ms >= 0)
 - **input_text**: VARCHAR(10000) NOT NULL
@@ -42,11 +43,11 @@
 
 - `users` (1) -- (N) `flashcards`
 
-  - Kolumna `user_id` w tabeli flashcards odnosi się do `users.user_id`
+  - Kolumna `user_id` w tabeli flashcards odnosi się do `auth.users.user_id`
 
 - `users` (1) -- (N) `generations`
 
-  - Kolumna `user_id` w tabeli generations odnosi się do `users.user_id`
+  - Kolumna `user_id` w tabeli generations odnosi się do `auth.users.user_id`
 
 - `generations` (1) -- (N) `flashcards`
 

@@ -1,4 +1,4 @@
-# API Endpoint Implementation Plan: POST /generations
+# API Endpoint Implementation Plan: POST /generate
 
 ## 1. Przegląd punktu końcowego
 
@@ -9,7 +9,7 @@
 ## 2. Szczegóły żądania
 
 - **Metoda HTTP**: POST
-- **Struktura URL**: /api/generations
+- **Struktura URL**: /api/generate
 - **Parametry**:
   - **Wymagane w Request Body**:
     - `input_text` (string, maksymalnie 10000 znaków)
