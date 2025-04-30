@@ -9,7 +9,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
-      "@/lib/utils": resolve(__dirname, "./tests/mocks/lib-utils.ts"),
     },
   },
   test: {
