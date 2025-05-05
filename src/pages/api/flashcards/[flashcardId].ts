@@ -114,3 +114,40 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
     );
   }
 };
+
+export const DELETE: APIRoute = async ({ params, locals }) => {
+  try {
+    // Retrieve Supabase client and authenticated user
+    const supabase = locals.supabase;
+    const user = locals.user;
+
+    // Validate and parse the flashcardId parameter
+    const result = getFlashcardByIdSchema.safeParse(params);
+    if (!result.success) {
+      return new Response(JSON.stringify({ error: "Invalid parameters", details: result.error.errors }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    const flashcardId = result.data.flashcardId;
+
+    // Perform deletion via service
+    const flashcardsService = new FlashcardsService(supabase);
+    await flashcardsService.deleteFlashcardById({ user_id: user.id, flashcard_id: flashcardId });
+
+    // Success: no content
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    if (error instanceof FlashcardNotFoundError) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    console.error("Error in DELETE /flashcards/[flashcardId]:", error);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+};

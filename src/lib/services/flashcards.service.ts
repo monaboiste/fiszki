@@ -27,6 +27,8 @@ interface UpdateFlashcardByIdParams {
   back: string;
 }
 
+type DeleteFlashcardByIdParams = GetFlashcardByIdParams;
+
 interface FlashcardWithUser {
   front: string;
   back: string;
@@ -199,5 +201,25 @@ export class FlashcardsService {
     }
 
     return updatedFlashcard;
+  }
+
+  // Deletes a flashcard by ID for a given user; throws if not found
+  async deleteFlashcardById({ user_id, flashcard_id }: DeleteFlashcardByIdParams): Promise<void> {
+    // Perform deletion query
+    const response = await this.supabase
+      .from("flashcards")
+      .delete()
+      .eq("flashcard_id", flashcard_id)
+      .eq("user_id", user_id)
+      .select();
+    // Handle any errors from Supabase
+    if (response.error) {
+      console.error(`Failed to delete flashcard[${flashcard_id}]:`, response.error);
+      throw new Error(`Failed to delete flashcard[${flashcard_id}]`);
+    }
+    // If no rows were deleted, the flashcard doesn't exist or doesn't belong to the user
+    if (!response.data || response.data.length === 0) {
+      throw new FlashcardNotFoundError(flashcard_id);
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { createFlashcards } from "./flashcards.service";
+import { FlashcardsService, FlashcardNotFoundError } from "./flashcards.service";
 import type { SupabaseClient } from "../../db/supabase.client";
 
 describe("flashcards.service", () => {
@@ -7,6 +7,7 @@ describe("flashcards.service", () => {
     let mockSupabase: Partial<SupabaseClient>;
     let mockInsert: ReturnType<typeof vi.fn>;
     let mockSelect: ReturnType<typeof vi.fn>;
+    let service: FlashcardsService;
 
     beforeEach(() => {
       mockSelect = vi.fn();
@@ -17,10 +18,7 @@ describe("flashcards.service", () => {
           insert: mockInsert,
         }),
       } as unknown as SupabaseClient;
-
-      // Spy on console.log and console.error
-      vi.spyOn(console, "log").mockImplementation(() => undefined);
-      vi.spyOn(console, "error").mockImplementation(() => undefined);
+      service = new FlashcardsService(mockSupabase as SupabaseClient);
     });
 
     it("should call Supabase insert and return result", async () => {
@@ -41,7 +39,7 @@ describe("flashcards.service", () => {
         error: null,
       });
 
-      const result = await createFlashcards(flashcards, mockSupabase as SupabaseClient);
+      const result = await service.createFlashcards(flashcards);
 
       expect(mockSupabase.from).toHaveBeenCalledWith("flashcards");
       expect(mockInsert).toHaveBeenCalledWith(flashcards);
@@ -67,11 +65,58 @@ describe("flashcards.service", () => {
         error: mockError,
       });
 
-      await expect(createFlashcards(flashcards, mockSupabase as SupabaseClient)).rejects.toThrow(
-        "Failed to insert flashcards"
-      );
+      await expect(service.createFlashcards(flashcards)).rejects.toThrow("Failed to insert flashcards");
+    });
+  });
 
-      expect(console.error).toHaveBeenCalledWith("Error inserting flashcards in service:", mockError);
+  describe("deleteFlashcardById", () => {
+    let mockSupabase: Partial<SupabaseClient>;
+    let mockDelete: ReturnType<typeof vi.fn>;
+    let mockEq: ReturnType<typeof vi.fn>;
+    let mockSelect: ReturnType<typeof vi.fn>;
+    let service: FlashcardsService;
+    const user_id = "user-1";
+    const flashcard_id = 123;
+
+    beforeEach(() => {
+      mockSelect = vi.fn();
+      mockEq = vi.fn().mockReturnThis();
+      mockDelete = vi.fn().mockReturnValue({ eq: mockEq, select: mockSelect });
+      mockSupabase = {
+        from: vi.fn().mockReturnValue({ delete: mockDelete }),
+      } as unknown as SupabaseClient;
+
+      service = new FlashcardsService(mockSupabase as SupabaseClient);
+    });
+
+    it("should resolve when a flashcard is deleted", async () => {
+      mockSelect.mockResolvedValue({ data: [{ flashcard_id, user_id }], error: null });
+
+      await expect(service.deleteFlashcardById({ user_id, flashcard_id })).resolves.toBeUndefined();
+
+      expect(mockSupabase.from).toHaveBeenCalledWith("flashcards");
+      expect(mockDelete).toHaveBeenCalled();
+      expect(mockEq).toHaveBeenCalledWith("flashcard_id", flashcard_id);
+      expect(mockEq).toHaveBeenCalledWith("user_id", user_id);
+      expect(mockSelect).toHaveBeenCalled();
+    });
+
+    it("should throw generic Error on Supabase error", async () => {
+      // Arrange: supabase returns an Error instance
+      const supError = new Error("DB down");
+      mockSelect.mockResolvedValue({ data: null, error: supError });
+
+      await expect(service.deleteFlashcardById({ user_id, flashcard_id })).rejects.toThrow(
+        `Failed to delete flashcard[${flashcard_id}]`
+      );
+    });
+
+    it("should throw FlashcardNotFoundError when no rows deleted", async () => {
+      mockSelect.mockResolvedValue({ data: [], error: null });
+
+      await expect(service.deleteFlashcardById({ user_id, flashcard_id })).rejects.toBeInstanceOf(
+        FlashcardNotFoundError
+      );
     });
   });
 });
