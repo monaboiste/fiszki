@@ -22,7 +22,12 @@ const getFlashcardsSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
   sort: z.enum(["created_at", "updated_at"]).default("created_at"),
-  filter: z.array(z.string()).optional(),
+  sort_direction: z.enum(["asc", "desc"]).default("desc"),
+  filter: z.preprocess((val) => {
+    if (typeof val === "string") return val.split(",");
+    if (Array.isArray(val)) return val;
+    return undefined;
+  }, z.array(z.string()).optional()),
 });
 
 export const POST: APIRoute = async ({ request, locals }) => {

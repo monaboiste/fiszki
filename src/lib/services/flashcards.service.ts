@@ -6,6 +6,7 @@ interface GetFlashcardsParams {
   page: number;
   limit: number;
   sort: "created_at" | "updated_at";
+  sort_direction: "asc" | "desc";
   filter?: string[];
 }
 
@@ -22,8 +23,23 @@ export class FlashcardsService {
 
   /**
    * Retrieves a paginated list of flashcards for a given user with sorting and filtering options.
+   * @param params - Parameters for fetching flashcards
+   * @param params.user_id - ID of the user whose flashcards to fetch
+   * @param params.page - Page number (1-based)
+   * @param params.limit - Number of items per page
+   * @param params.sort - Field to sort by (created_at, updated_at, front, back, or type)
+   * @param params.sort_direction - Sort direction (asc or desc)
+   * @param params.filter - Optional array of filter criteria
+   * @returns Promise with paginated flashcards and metadata
    */
-  async getFlashcards({ user_id, page, limit, sort, filter }: GetFlashcardsParams): Promise<FlashcardsListResponseDto> {
+  async getFlashcards({
+    user_id,
+    page,
+    limit,
+    sort,
+    sort_direction,
+    filter,
+  }: GetFlashcardsParams): Promise<FlashcardsListResponseDto> {
     let query = this.supabase.from("flashcards").select("*", { count: "exact" }).eq("user_id", user_id);
 
     // Apply filters if provided
@@ -37,7 +53,7 @@ export class FlashcardsService {
     }
 
     // Apply sorting
-    query = query.order(sort, { ascending: false });
+    query = query.order(sort, { ascending: sort_direction === "asc" });
 
     // Apply pagination
     const from = (page - 1) * limit;

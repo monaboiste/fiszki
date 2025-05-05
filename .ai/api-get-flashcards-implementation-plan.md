@@ -14,6 +14,7 @@ Endpoint `GET /flashcards` umożliwia pobranie listy fiszek należących do uwie
   - `page` (integer, opcjonalny, domyślnie 1) – numer strony (>= 1)
   - `limit` (integer, opcjonalny, domyślnie 10, maks. 100) – liczba elementów na stronie
   - `sort` (string, opcjonalny, domyślnie `created_at`) – pole sortowania, dozwolone wartości: `created_at`, `updated_at`, `front`, `back`, `type`
+  - `sort_direction` (string, opcjonalny, domyślnie `desc`) – kierunek sortowania, dozwolone wartości: `asc`, `desc`
   - `filter` (string[] | string, opcjonalny) – lista kryteriów filtrowania w formacie `field:value`, np. `type:manual` lub `'type:manual,field2:value2'`. Obecnie wspierane pole: `type`, w przyszłości możliwe rozszerzenie na kolejne pola.
 - Body: brak (GET)
 
@@ -27,6 +28,7 @@ Endpoint `GET /flashcards` umożliwia pobranie listy fiszek należących do uwie
     page: z.coerce.number().int().min(1).default(1),
     limit: z.coerce.number().int().min(1).max(100).default(10),
     sort: z.enum(["created_at", "updated_at", "front", "back", "type"]).default("created_at"),
+    sort_direction: z.enum(["asc", "desc"]).default("desc"),
     filter: z.preprocess((val) => {
       if (typeof val === "string") return val.split(",");
       if (Array.isArray(val)) return val;
@@ -61,7 +63,7 @@ Endpoint `GET /flashcards` umożliwia pobranie listy fiszek należących do uwie
      - `.eq('user_id', userId)`
        - podziel `criterion` na `[field, value] = criterion.split(':')`
          i wywołaj `.eq(field, value)`
-     - `.order(sort, { ascending: false })`
+     - `.order(sort, { ascending: sort_direction === 'asc' })`
      - `.range((page-1)*limit, page*limit - 1)`
      - `.select('*', { count: 'exact' })`
    - Zwraca obiekt `{ rows, count }`.
