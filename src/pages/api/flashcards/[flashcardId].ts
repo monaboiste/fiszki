@@ -8,6 +8,11 @@ const getFlashcardByIdSchema = z.object({
   flashcardId: z.string().regex(/^\d+$/, "Flashcard ID must be a number").transform(Number),
 });
 
+export const updateFlashcardByIdSchema = z.object({
+  front: z.string().min(1, "Front must be at least 1 character").max(200, "Front must be at most 200 characters"),
+  back: z.string().min(1, "Back must be at least 1 character").max(500, "Back must be at most 500 characters"),
+});
+
 export const GET: APIRoute = async ({ params, locals }) => {
   try {
     const supabase = locals.supabase;
@@ -18,7 +23,7 @@ export const GET: APIRoute = async ({ params, locals }) => {
       return new Response(
         JSON.stringify({
           error: "Invalid parameters",
-          details: result.error.format(),
+          details: result.error.errors,
         }),
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
@@ -40,6 +45,67 @@ export const GET: APIRoute = async ({ params, locals }) => {
     }
 
     console.error("Error in GET /flashcards/[flashcardId]:", error);
+    return new Response(
+      JSON.stringify({
+        error: "Internal server error",
+      }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+};
+
+export const PUT: APIRoute = async ({ params, request, locals }) => {
+  try {
+    const supabase = locals.supabase;
+    const user = locals.user;
+
+    const result = getFlashcardByIdSchema.safeParse(params);
+    if (!result.success) {
+      return new Response(
+        JSON.stringify({
+          error: "Invalid parameters",
+          details: result.error.errors,
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+    const flashcardId = result.data.flashcardId;
+
+    const body = await request.json();
+    const validationResult = updateFlashcardByIdSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({
+          error: "Invalid input",
+          details: validationResult.error.errors,
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+    const { front, back } = validationResult.data;
+
+    const flashcardsService = new FlashcardsService(supabase);
+    const updatedFlashcard = await flashcardsService.updateFlashcard({
+      user_id: user.id,
+      flashcard_id: flashcardId,
+      front,
+      back,
+    });
+
+    return new Response(JSON.stringify(updatedFlashcard), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    if (error instanceof FlashcardNotFoundError) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    console.error("Error in PUT /flashcards/[flashcardId]:", error);
     return new Response(
       JSON.stringify({
         error: "Internal server error",

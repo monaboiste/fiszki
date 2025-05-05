@@ -1,5 +1,10 @@
 import type { SupabaseClient } from "../../db/supabase.client";
-import type { BulkCreateFlashcardsResponseDto, FlashcardDto, FlashcardsListResponseDto } from "../../types";
+import type {
+  BulkCreateFlashcardsResponseDto,
+  FlashcardDto,
+  FlashcardEntity,
+  FlashcardsListResponseDto,
+} from "../../types";
 
 interface GetFlashcardsParams {
   user_id: string;
@@ -13,6 +18,13 @@ interface GetFlashcardsParams {
 interface GetFlashcardByIdParams {
   user_id: string;
   flashcard_id: number;
+}
+
+interface UpdateFlashcardByIdParams {
+  user_id: string;
+  flashcard_id: number;
+  front: string;
+  back: string;
 }
 
 interface FlashcardWithUser {
@@ -154,5 +166,38 @@ export class FlashcardsService {
       throw new Error("Failed to insert flashcards");
     }
     return { flashcards: data };
+  }
+
+  async updateFlashcard({ user_id, flashcard_id, front, back }: UpdateFlashcardByIdParams): Promise<FlashcardDto> {
+    const flashcardToUpdate: Partial<FlashcardEntity> = {
+      flashcard_id,
+      user_id,
+      front,
+      back,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { data: updatedFlashcard, error } = await this.supabase
+      .from("flashcards")
+      .update(flashcardToUpdate)
+      .eq("flashcard_id", flashcard_id)
+      .eq("user_id", user_id)
+      .select()
+      .single();
+
+    // Check if the update returned null, indicating no record was found or matched the conditions
+    if (!updatedFlashcard) {
+      // The update failed either because the flashcard doesn't exist
+      // or because it doesn't belong to the user. In both cases, return 404.
+      throw new FlashcardNotFoundError(flashcard_id);
+    }
+
+    // Handle potential errors from the update operation itself
+    if (error) {
+      console.error(`Failed to update flashcard[${flashcard_id}]:`, error);
+      throw new Error(`Failed to update flashcard[${flashcard_id}]: ${error.message}`);
+    }
+
+    return updatedFlashcard;
   }
 }
