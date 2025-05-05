@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --mode devlocal",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "astro preview --mode devlocal",
     "astro": "astro",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

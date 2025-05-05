@@ -7,7 +7,7 @@
 
 # env
 .env
-.env.local
+.env.devlocal
 .env.test
 .env.development
 
