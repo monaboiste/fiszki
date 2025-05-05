@@ -27,7 +27,7 @@ export class FlashcardsService {
    * @param params.user_id - ID of the user whose flashcards to fetch
    * @param params.page - Page number (1-based)
    * @param params.limit - Number of items per page
-   * @param params.sort - Field to sort by (created_at, updated_at, front, back, or type)
+   * @param params.sort - Field to sort by (created_at or updated_at)
    * @param params.sort_direction - Sort direction (asc or desc)
    * @param params.filter - Optional array of filter criteria
    * @returns Promise with paginated flashcards and metadata
@@ -40,7 +40,47 @@ export class FlashcardsService {
     sort_direction,
     filter,
   }: GetFlashcardsParams): Promise<FlashcardsListResponseDto> {
-    let query = this.supabase.from("flashcards").select("*", { count: "exact" }).eq("user_id", user_id);
+    // First, get total count to handle pagination properly
+    const countQuery = this.supabase
+      .from("flashcards")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user_id);
+
+    // Apply filters to count query if provided
+    if (filter?.length) {
+      for (const criterion of filter) {
+        const [field, value] = criterion.split(":");
+        if (field === "type") {
+          countQuery.eq(field, value);
+        }
+      }
+    }
+
+    const { count, error: countError } = await countQuery;
+
+    if (countError) {
+      throw new Error(`Failed to fetch flashcards count: ${countError.message}`);
+    }
+
+    const total = count ?? 0;
+
+    // If there are no records or requested page is beyond available records, return empty result
+    const lastPage = Math.ceil(total / limit);
+    if (total === 0 || page > lastPage) {
+      return {
+        flashcards: [],
+        page,
+        limit,
+        total,
+      };
+    }
+
+    // Calculate range for the requested page
+    const from = (page - 1) * limit;
+    const to = Math.min(page * limit - 1, total - 1);
+
+    // Fetch records
+    let query = this.supabase.from("flashcards").select("*").eq("user_id", user_id);
 
     // Apply filters if provided
     if (filter?.length) {
@@ -52,15 +92,10 @@ export class FlashcardsService {
       }
     }
 
-    // Apply sorting
-    query = query.order(sort, { ascending: sort_direction === "asc" });
+    // Apply sorting and pagination
+    query = query.order(sort, { ascending: sort_direction === "asc" }).range(from, to);
 
-    // Apply pagination
-    const from = (page - 1) * limit;
-    const to = page * limit - 1;
-    query = query.range(from, to);
-
-    const { data: flashcards, count, error } = await query;
+    const { data: flashcards, error } = await query;
 
     if (error) {
       throw new Error(`Failed to fetch flashcards: ${error.message}`);
@@ -70,7 +105,7 @@ export class FlashcardsService {
       flashcards: flashcards as FlashcardDto[],
       page,
       limit,
-      total: count ?? 0,
+      total,
     };
   }
 
