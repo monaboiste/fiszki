@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "../../db/supabase.client";
 import type { BulkCreateFlashcardsResponseDto, FlashcardDto, FlashcardsListResponseDto } from "../../types";
 
 interface GetFlashcardsParams {
@@ -10,6 +10,11 @@ interface GetFlashcardsParams {
   filter?: string[];
 }
 
+interface GetFlashcardByIdParams {
+  user_id: string;
+  flashcard_id: number;
+}
+
 interface FlashcardWithUser {
   front: string;
   back: string;
@@ -18,8 +23,34 @@ interface FlashcardWithUser {
   generation_id: number | null;
 }
 
+export class FlashcardNotFoundError extends Error {
+  constructor(flashcardId: number) {
+    super(`Flashcard with ID ${flashcardId} not found`);
+    this.name = "FlashcardNotFoundError";
+  }
+}
+
 export class FlashcardsService {
   constructor(private readonly supabase: SupabaseClient) {}
+
+  async getFlashcardById({ user_id, flashcard_id }: GetFlashcardByIdParams): Promise<FlashcardDto> {
+    const { data: flashcard, error } = await this.supabase
+      .from("flashcards")
+      .select("*")
+      .eq("flashcard_id", flashcard_id)
+      .eq("user_id", user_id)
+      .single();
+
+    if (error && error.code === "PGRST116") {
+      throw new FlashcardNotFoundError(flashcard_id);
+    }
+
+    if (error) {
+      throw new Error(`Failed to fetch flashcard[${flashcard_id}]: ${error.message}`);
+    }
+
+    return flashcard;
+  }
 
   /**
    * Retrieves a paginated list of flashcards for a given user with sorting and filtering options.
