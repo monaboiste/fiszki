@@ -133,6 +133,7 @@ export function FlashcardForm() {
       setErrors((prev) => ({ ...prev, api: "An error occurred. Please try again." }));
       toast.error(error.message || "An unexpected error occurred");
     }
+    setIsLoading(false);
   };
 
   // Handle form submission
@@ -182,6 +183,7 @@ export function FlashcardForm() {
       // Handle success
       toast.success("Flashcard created successfully!");
       setTimeout(() => {
+        setFormData({ front: "", back: "" }); // Reset form data
         window.location.href = "/flashcards";
       }, 1000); // 1 second delay to show the toast
     } catch (err) {
