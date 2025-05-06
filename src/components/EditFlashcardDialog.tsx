@@ -94,7 +94,7 @@ const EditFlashcardDialog: React.FC<EditFlashcardDialogProps> = ({ flashcard, is
             <Textarea
               id="back"
               placeholder="Back content"
-              className="min-h-[120px]"
+              className="min-h-[120px] max-h-[60vh] resize-y"
               {...register("back")}
               disabled={isSubmitting}
             />
