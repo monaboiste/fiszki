@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { BulkCreateFlashcardsCommand } from "@/types";
+import { toast } from "sonner";
 
 // Form data validation schema
 const flashcardSchema = z.object({
@@ -120,12 +121,17 @@ export function FlashcardForm() {
       });
 
       setErrors((prev) => ({ ...prev, ...apiErrors }));
+      toast.error("Please correct the form errors and try again");
     } else if (error.status === 401) {
       // Redirect to login page if unauthorized
-      window.location.href = "/login";
+      toast.error("Your session has expired. Please log in again.");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000); // 1 second delay to show the toast
     } else {
       // Handle other errors
       setErrors((prev) => ({ ...prev, api: "An error occurred. Please try again." }));
+      toast.error(error.message || "An unexpected error occurred");
     }
   };
 
@@ -134,6 +140,7 @@ export function FlashcardForm() {
     e.preventDefault();
 
     if (!validateForm()) {
+      toast.error("Please fill in all required fields correctly");
       return;
     }
 
@@ -173,7 +180,10 @@ export function FlashcardForm() {
       }
 
       // Handle success
-      window.location.href = "/flashcards";
+      toast.success("Flashcard created successfully!");
+      setTimeout(() => {
+        window.location.href = "/flashcards";
+      }, 1000); // 1 second delay to show the toast
     } catch (err) {
       const apiError: ApiError = {
         status: 500,
@@ -181,8 +191,6 @@ export function FlashcardForm() {
       };
 
       handleApiError(apiError);
-    } finally {
-      setIsLoading(false);
     }
   };
 
