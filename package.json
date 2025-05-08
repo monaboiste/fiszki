@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "astro dev --mode devlocal",
     "build": "astro build",
+    "dev": "astro dev --mode devlocal",
     "preview": "astro preview --mode devlocal",
+    "development": "astro dev --mode development",
     "astro": "astro",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -14,6 +15,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
+    "e2e:dev": "astro dev --mode test",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "e2e:debug": "playwright test --debug"
@@ -38,6 +40,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "dotenv": "^16.5.0",
     "lucide-react": "^0.487.0",
     "next-themes": "^0.4.6",
     "react": "^19.1.0",

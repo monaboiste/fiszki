@@ -13,7 +13,7 @@ const PUBLIC_PATHS = [
   "/api/auth/confirm",
 ];
 
-export const onRequest = defineMiddleware(async ({ locals, cookies, url, request }, next) => {
+export const onRequest = defineMiddleware(async ({ locals, cookies, url, request, redirect }, next) => {
   // Skip auth check for public paths
   if (PUBLIC_PATHS.includes(url.pathname)) {
     return next();
@@ -41,10 +41,11 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
     return next();
   }
 
-  return new Response(
-    JSON.stringify({
-      error: "Authentication required",
-    }),
-    { status: 401, headers: { "Content-Type": "application/json" } }
-  );
+  return redirect("/auth/login");
+  // return new Response(
+  //   JSON.stringify({
+  //     error: "Authentication required",
+  //   }),
+  //   { status: 401, headers: { "Content-Type": "application/json" } }
+  // );
 });

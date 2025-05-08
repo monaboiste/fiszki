@@ -28,6 +28,7 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (values: FormData) => {
+    console.log("LoginForm onSubmit triggered");
     try {
       setIsLoading(true);
       setError(null);
@@ -48,7 +49,7 @@ export default function LoginForm() {
       }
 
       // Redirect to the specified URL after successful login
-      window.location.href = "/";
+      window.location.href = "/generate";
     } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {
@@ -60,8 +61,12 @@ export default function LoginForm() {
     <Card>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {error && <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md">{error}</div>}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" data-testid="login-form">
+            {error && (
+              <div data-testid="login-error" className="p-3 text-sm text-red-500 bg-red-50 rounded-md">
+                {error}
+              </div>
+            )}
 
             <FormField
               control={form.control}
@@ -75,6 +80,7 @@ export default function LoginForm() {
                       placeholder="Enter your email"
                       autoComplete="email"
                       disabled={isLoading}
+                      data-testid="login-email"
                       {...field}
                     />
                   </FormControl>
@@ -95,6 +101,7 @@ export default function LoginForm() {
                       placeholder="Enter your password"
                       autoComplete="current-password"
                       disabled={isLoading}
+                      data-testid="login-password"
                       {...field}
                     />
                   </FormControl>
@@ -103,7 +110,7 @@ export default function LoginForm() {
               )}
             />
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isLoading} data-testid="login-submit">
               {isLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
