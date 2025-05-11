@@ -1,4 +1,5 @@
 import { type Page, type Locator, expect } from "@playwright/test";
+import { AUTH_FILE } from "playwright.config";
 
 /**
  * Page Object Model for the login page.
@@ -105,5 +106,13 @@ export class LoginPage {
   async getPasswordRequiredError(): Promise<string | null> {
     await expect(this.passwordRequiredError).toBeVisible();
     return await this.passwordRequiredError.textContent();
+  }
+
+  async waitForUrl(url: string) {
+    await this.page.waitForURL(`**${url}`, { timeout: 15000, waitUntil: "domcontentloaded" });
+  }
+
+  async saveState() {
+    await this.page.context().storageState({ path: AUTH_FILE });
   }
 }

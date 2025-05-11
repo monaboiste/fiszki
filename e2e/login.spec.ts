@@ -17,11 +17,12 @@ test.describe("Login Flow", () => {
 
   test("successful login with valid credentials", async () => {
     const { email, password } = credentials.getValidCredentials();
-
     await loginPage.login(email, password);
 
-    // Verify navigation to /generate page
-    await expect.poll(() => loginPage.getCurrentUrl(), { timeout: 10000 }).toContain("/generate");
+    await loginPage.waitForUrl("/generate");
+    await expect(await loginPage.getCurrentUrl()).toContain("/generate");
+
+    await loginPage.saveState();
   });
 
   test("displays error with invalid credentials", async () => {

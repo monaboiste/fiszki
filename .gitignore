@@ -22,3 +22,6 @@ test-results
 
 # auto-generated
 .astro
+
+# e2e
+e2e/.auth
