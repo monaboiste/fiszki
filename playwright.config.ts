@@ -4,6 +4,8 @@ import path from "path";
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
 
+export const AUTH_FILE = "e2e/.auth/user.json";
+
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
@@ -19,8 +21,18 @@ export default defineConfig({
   },
   projects: [
     {
+      name: "auth",
+      testMatch: /e2e\/login\.spec\.ts/,
+    },
+    {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      dependencies: ["auth"],
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: AUTH_FILE,
+      },
+      testMatch: /e2e\/.*\.spec\.ts/,
+      testIgnore: /login\.spec\.ts/,
     },
   ],
   webServer: {
