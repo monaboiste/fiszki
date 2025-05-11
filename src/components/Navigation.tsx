@@ -68,7 +68,7 @@ export default function Navigation({ user }: NavigationProps) {
                   aria-current={isActive("/flashcards/new") ? "page" : undefined}
                 >
                   <a href="/flashcards/new" className="text-gray-700 hover:text-gray-900">
-                    Create Flashcards
+                    Create Flashcard
                   </a>
                 </Button>
                 <Button
@@ -125,7 +125,7 @@ export default function Navigation({ user }: NavigationProps) {
                   : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
               }`}
             >
-              Create Flashcards
+              Create Flashcard
             </a>
             <a
               href="/flashcards"

@@ -47,6 +47,7 @@ const FlashcardsSearchFilter: React.FC<FlashcardsSearchFilterProps> = ({ searchT
         value={inputValue}
         onChange={handleInputChange}
         className="max-w-md"
+        data-testid="search-flashcards-input"
       />
     </div>
   );

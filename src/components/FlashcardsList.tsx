@@ -189,9 +189,11 @@ const FlashcardItem: React.FC<FlashcardItemProps> = ({ flashcard, onEdit, onDele
     : format(new Date(flashcard.created_at), "MMM d, yyyy");
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col" data-testid="flashcard-item">
       <CardHeader className="pb-2">
-        <CardTitle className="line-clamp-2 text-lg">{flashcard.front}</CardTitle>
+        <CardTitle className="line-clamp-2 text-lg" data-testid="flashcard-item-front">
+          {flashcard.front}
+        </CardTitle>
         <CardDescription>Last updated: {lastUpdated}</CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
