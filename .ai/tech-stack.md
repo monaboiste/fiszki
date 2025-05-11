@@ -21,7 +21,7 @@ AI - Komunikacja z modelami przez usługę Openrouter.ai:
 CI/CD i Hosting:
 
 - Github Actions do tworzenia pipeline'ów CI/CD
-- Chmura AWS serwis ECS Fargate do hostowania aplikacji za pośrednictwem obrazu docker
+- vercel.app do hostowania aplikacji (serverless)
 
 Testowanie:
 
