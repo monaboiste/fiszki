@@ -1,0 +1,47 @@
+name: Build and Test Master
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc' # Use .nvmrc to define Node.js version
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci # Use npm ci for cleaner installs
+
+      - name: Run tests
+        run: npm test # Zakładam, że masz skrypt 'test' w package.json dla Vitest
+
+  build:
+    name: Build Production Version
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc' # Use .nvmrc to define Node.js version
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci # Use npm ci for cleaner installs
+
+      - name: Build application
+        run: npm run build
