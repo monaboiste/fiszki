@@ -51,6 +51,7 @@ jobs:
         with:
           name: unit-test-coverage
           path: coverage/ # Default Vitest coverage directory
+          retention-days: 5
 
   e2e-test:
     name: E2E Tests
@@ -120,8 +121,8 @@ jobs:
       - name: Download unit test coverage
         uses: actions/download-artifact@v4
         with:
-          name: unit-coverage
-          path: unit-coverage
+          name: unit-test-coverage
+          path: unit-test-coverage
 
       - name: Download E2E report
         uses: actions/download-artifact@v4
