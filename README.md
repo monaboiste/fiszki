@@ -33,7 +33,7 @@ learning experience.
 
 - **CI/CD & Hosting:**
   - GitHub Actions
-  - AWS ECS Fargate (Docker-based deployment)
+  - vercel.app (serverless)
 
 ## Getting Started Locally
 
