@@ -18,7 +18,8 @@
     "e2e:dev": "astro dev --mode test",
     "e2e": "playwright test --trace on",
     "e2e:ui": "playwright test --ui",
-    "e2e:debug": "playwright test --debug"
+    "e2e:debug": "playwright test --debug",
+    "e2e:ci": "playwright test --ui"
   },
   "dependencies": {
     "@astrojs/node": "^9.1.3",

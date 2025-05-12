@@ -109,7 +109,7 @@ export class LoginPage {
   }
 
   async waitForUrl(url: string) {
-    await this.page.waitForURL(`**${url}`, { timeout: 15000, waitUntil: "domcontentloaded" });
+    await this.page.waitForURL(`**${url}`, { waitUntil: "domcontentloaded" });
   }
 
   async saveState() {

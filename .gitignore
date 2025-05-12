@@ -22,6 +22,8 @@ test-results
 
 # auto-generated
 .astro
+.vercel
 
 # e2e
 e2e/.auth
+
