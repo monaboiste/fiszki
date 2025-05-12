@@ -126,7 +126,7 @@ export function FlashcardForm() {
       // Redirect to login page if unauthorized
       toast.error("Your session has expired. Please log in again.");
       setTimeout(() => {
-        window.location.href = "/login";
+        window.location.href = "/auth/login";
       }, 1000); // 1 second delay to show the toast
     } else {
       // Handle other errors
