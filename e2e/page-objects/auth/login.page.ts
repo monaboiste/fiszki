@@ -23,6 +23,7 @@ export class LoginPage {
   // Form validation messages
   private readonly emailFormatError: Locator;
   private readonly passwordRequiredError: Locator;
+  private readonly emailRequiredError: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -36,6 +37,7 @@ export class LoginPage {
     // Validation messages
     this.emailFormatError = page.locator("text=Please enter a valid email address");
     this.passwordRequiredError = page.locator("text=Please enter your password");
+    this.emailRequiredError = page.locator("text=Please enter a valid email address");
   }
 
   /**
@@ -45,20 +47,31 @@ export class LoginPage {
     await this.page.goto("/auth/login");
   }
 
+  async fillEmail(email: string) {
+    const emailInput = this.emailInput;
+    await expect(emailInput).toBeVisible();
+    await emailInput.fill(email);
+  }
+
+  async fillPassword(password: string) {
+    const passwordInput = this.passwordInput;
+    await expect(passwordInput).toBeVisible();
+    await passwordInput.fill(password);
+  }
+
+  async clickSubmit() {
+    const submitButton = this.submitButton;
+    await expect(submitButton).toBeVisible();
+    await submitButton.click();
+  }
+
   /**
    * Attempts to log in with the provided credentials
    */
   async login(email: string, password: string) {
-    await this.emailInput.waitFor({ state: "visible" }).then(() => this.emailInput.fill(email));
-    await this.passwordInput.waitFor({ state: "visible" }).then(() => this.passwordInput.fill(password));
-    await this.submitButton.click();
-  }
-
-  /**
-   * Gets the current URL of the page
-   */
-  async getCurrentUrl(): Promise<string> {
-    return this.page.url();
+    await this.fillEmail(email);
+    await this.fillPassword(password);
+    await this.clickSubmit();
   }
 
   /**
@@ -77,14 +90,6 @@ export class LoginPage {
   }
 
   /**
-   * Enters an invalid email and triggers validation
-   */
-  async enterInvalidEmail(invalidEmail: string) {
-    await this.emailInput.fill(invalidEmail);
-    await this.emailInput.blur();
-  }
-
-  /**
    * Gets the email format error message if visible
    */
   async getEmailFormatError(): Promise<string | null> {
@@ -93,11 +98,11 @@ export class LoginPage {
   }
 
   /**
-   * Attempts to submit form with empty password
+   * Gets the password required error message if visible
    */
-  async submitWithEmptyPassword(email: string) {
-    await this.emailInput.fill(email);
-    await this.submitButton.click();
+  async getEmailRequiredError(): Promise<string | null> {
+    await expect(this.emailRequiredError).toBeVisible();
+    return await this.emailRequiredError.textContent();
   }
 
   /**
@@ -106,10 +111,6 @@ export class LoginPage {
   async getPasswordRequiredError(): Promise<string | null> {
     await expect(this.passwordRequiredError).toBeVisible();
     return await this.passwordRequiredError.textContent();
-  }
-
-  async waitForUrl(url: string) {
-    await this.page.waitForURL(`**${url}`, { waitUntil: "domcontentloaded" });
   }
 
   async saveState() {
