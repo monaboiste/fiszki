@@ -8,6 +8,8 @@ input text, while also allowing users to manually create, edit, and delete flash
 Additionally, the application integrates with a spaced repetition algorithm to enhance the
 learning experience.
 
+Live Demo available here: [https://fiszki-eight.vercel.app](https://fiszki-eight.vercel.app).
+
 ## Tech Stack
 
 - **Frontend:**
