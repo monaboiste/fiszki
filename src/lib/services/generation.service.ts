@@ -10,12 +10,12 @@ const openRouterConfig: OpenRouterConfig = {
     (() => {
       throw new Error("OPENROUTER_API_KEY environment variable is not set");
     })(),
-  model: "google/learnlm-1.5-pro-experimental:free",
+  model: "meta-llama/llama-4-maverick:free",
   systemMessage: `You are an expert at creating flashcards from given text.
 Your task is to analyze the input text and create meaningful flashcards that help in learning the material.
 Each flashcard should have a front (question/concept) and back (answer/explanation).
-Front should contain maximum 200 characters. Back should contain maximum 500 characters.
-Return at most 3 flashcards.`, // todo: just 3 for now to support free models' token restrictions
+Front should contain maximum 20 characters. Back should contain maximum 50 characters.
+Return at most 5 flashcards.`, // todo: more restrictive bounds to support free models' token plan
   responseFormat: {
     type: "json_schema" as const,
     json_schema: {
