@@ -15,7 +15,7 @@ const openRouterConfig: OpenRouterConfig = {
 Your task is to analyze the input text and create meaningful flashcards that help in learning the material.
 Each flashcard should have a front (question/concept) and back (answer/explanation).
 Front should contain maximum 200 characters. Back should contain maximum 500 characters.
-Return at most 3 flashcards.`, // todo: just 3 for now to support free models' token restrictions
+Return at most 10 flashcards.`,
   responseFormat: {
     type: "json_schema" as const,
     json_schema: {
