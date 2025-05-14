@@ -10,7 +10,7 @@ const openRouterConfig: OpenRouterConfig = {
     (() => {
       throw new Error("OPENROUTER_API_KEY environment variable is not set");
     })(),
-  model: "google/learnlm-1.5-pro-experimental:free",
+  model: "meta-llama/llama-4-scout:free",
   systemMessage: `You are an expert at creating flashcards from given text.
 Your task is to analyze the input text and create meaningful flashcards that help in learning the material.
 Each flashcard should have a front (question/concept) and back (answer/explanation).
